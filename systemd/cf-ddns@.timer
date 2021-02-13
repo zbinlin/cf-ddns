@@ -1,0 +1,10 @@
+[Unit]
+Description=cf-ddns@.service timer
+
+[Timer]
+RandomizedDelaySec=1minutes
+OnActiveSec=1minutes
+OnUnitInactiveSec=30minutes
+
+[Install]
+WantedBy=timers.target

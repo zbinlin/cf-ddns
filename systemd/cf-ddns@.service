@@ -1,0 +1,13 @@
+# Contents of $XDG_CONFIG_HOME/systemd/user/cf-ddns@.service
+[Unit]
+Description=Cloudflare Dynamic DNS service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=%h/projects/cf-ddns/.env
+ExecStart=%h/projects/cf-ddns/update.sh %i
+
+[Install]
+WantedBy=default.target

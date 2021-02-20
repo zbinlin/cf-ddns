@@ -1,4 +1,9 @@
-Cloudflare Dynamic DNS script
+Cloudflare Dynamic DNS tools (Only IPv6)
+
+## Requirements
+
+* curl
+* Cloudflare's Zone ID and API Token (DNS:Edit permission)
 
 ## PreInstall
 

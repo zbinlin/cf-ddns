@@ -75,6 +75,18 @@ list() {
 	fetch "zones/${ZONE_ID}/dns_records?type=AAAA${name}"
 }
 
+find_id_by_name() {
+	: ${1:?Argument 1 must be a domain name}
+	lst=$(list "$1")
+	rid=$(echo -n "$lst" | jq -r '.[0].id')
+	if [ "null" = "$rid" ];
+	then
+		echo ""
+	else
+		echo "$rid"
+	fi
+}
+
 create() {
 	: ${1:?Argument 1 must be a domain name}
 	: ${2:?Argument 2 must be a IPv6 address}
@@ -107,14 +119,12 @@ upsert() {
 	: ${1:?Argument 1 must be a domain name}
 	: ${2:?Argument 2 must be a IPv6 address}
 
-	lst=$(list "$1")
-	rid=$(echo -n "$lst" | jq -r '.[0].id')
-
-	if [ "null" = "$rid" ];
+	id=$(find_id_by_name "$1")
+	if [ -z "$id" ];
 	then
 		create "$1" "$2"
 	else
-		update "$rid" "$2"
+		update "$id" "$2"
 	fi
 }
 

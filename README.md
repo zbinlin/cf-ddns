@@ -3,6 +3,7 @@ Cloudflare Dynamic DNS tools (Only IPv6)
 ## Requirements
 
 * curl
+* jq
 * Cloudflare's Zone ID and API Token (DNS:Edit permission)
 
 ## PreInstall

@@ -11,17 +11,7 @@ ZONE_ID=${ZONE_ID:-95774d875c16e0760e081e4a42e53795}
 DOMAIN=${1:-$DOMAIN}
 #API_TOKEN=${API_TOKEN:-}
 
-IP=$(\
-	ip -6 address show scope global \
-	| awk '{ print $2 }' \
-	| grep \
-		-e '^200[1,3]' \
-		-e '^2[4,6,8,c]' \
-		-e '^26[1-3]' \
-		-e '^2a[0-1]' \
-	| head -n1 \
-)
-IP=${IP%/*}
+IP=$(ip -6 -j route get 2000:: | jq -r '.[0].prefsrc')
 
 if [ -z "$IP" ];
 then

@@ -2,14 +2,36 @@
 
 set -e
 
+log() {
+	if [ -n "${DEBUG++}" ];
+	then
+		echo "$@" >&2
+	fi
+}
+
+ENDPOINT=${API_ENDPOINT:-https://api.cloudflare.com/client/v4/}
+DOMAIN=${1:-$DOMAIN}
+
 set -o allexport
 [ -f .env ] && . ./.env
+[ -f .${DOMAIN}.env ] && . ./.${DOMAIN}.env
 set +o allexport
 
-ENDPOINT=https://api.cloudflare.com/client/v4/
-ZONE_ID=${ZONE_ID:-95774d875c16e0760e081e4a42e53795}
-DOMAIN=${1:-$DOMAIN}
-#API_TOKEN=${API_TOKEN:-}
+if [ -z "$ZONE_ID" ];
+then
+	echo "Env ZONE_ID not found" >&2
+	exit 1
+fi
+if [ -z "API_TOKEN" ];
+then
+	echo "Env API_TOKEN not found" >&2
+	exit 1
+fi
+
+log "ZONE_ID=${ZONE_ID}"
+log "API_TOKEN=${API_TOKEN:0:3}******${API_TOKEN: -3}"
+log "ENDPOINT=${ENDPOINT}"
+log "DOMAIN=${DOMAIN}"
 
 IP=$(ip -6 -j route get 2000:: | jq -r '.[0].prefsrc')
 
@@ -18,14 +40,6 @@ then
 	echo "IPv6 address not found" >&2
 	exit 1
 fi
-
-
-log() {
-	if [ -n "${DEBUG++}" ];
-	then
-		echo "$@" >&2
-	fi
-}
 
 fetch() {
 	method="GET"

@@ -6,7 +6,8 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-EnvironmentFile=%h/projects/cf-ddns/.env
+EnvironmentFile=-%h/projects/cf-ddns/.env
+EnvironmentFile=-%h/projects/cf-ddns/.%i.env
 ExecStart=%h/projects/cf-ddns/update.sh %i
 
 [Install]
